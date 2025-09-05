@@ -144,12 +144,21 @@ function renderEmployeesTable() {
     
     pageEmployees.forEach(employee => {
         const row = document.createElement('tr');
+        
+        // Format working days
+        const workingDays = [];
+        if (employee.suntue) workingDays.push('أح-ث');
+        if (employee.wedthu) workingDays.push('أر-خ');
+        if (employee.frisat) workingDays.push('ج-س');
+        
         row.innerHTML = `
             <td>${employee.name}</td>
             <td>${employee.email}</td>
-            <td>${employee.department.toUpperCase()}</td>
-            <td><span class="badge bg-primary">${employee.total}</span></td>
-            <td><span class="badge bg-success">${employee.done}</span></td>
+            <td><span class="badge bg-secondary">${employee.department.toUpperCase()}</span></td>
+            <td>${employee.shift}</td>
+            <td>
+                ${workingDays.map(day => `<span class="badge bg-info me-1">${day}</span>`).join('')}
+            </td>
         `;
         tbody.appendChild(row);
     });
