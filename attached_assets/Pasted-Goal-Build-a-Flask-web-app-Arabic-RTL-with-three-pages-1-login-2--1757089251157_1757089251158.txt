@@ -1,0 +1,75 @@
+Goal: Build a Flask web app (Arabic, RTL) with three pages:
+1. تسجيل الدخول (login)
+2. لوحة التحكم (main dashboard)
+3. بيانات الموظفين (CRUD)
+Styling/UX:
+* RTL (<html lang="ar" dir="rtl">)
+* Suitable for Saudi government (calm, formal, high contrast, accessible)
+* Use only the given palette (as CSS variables).
+* Use the font “Tajawal” from Google Fonts (fallback to system-ui, sans-serif).
+* Responsive layout.
+Libraries:
+* Flask (server)
+* Chart.js via CDN (charts)
+* Vanilla JS only for UI logic.
+Data/state (MVP):
+* Keep an in-memory Python list of employees and a small dict for email categories.
+* Provide endpoints to GET employees and POST updated list.
+* On login submit: print the submitted body to console, validate against demo creds, then proceed or flash an error.
+* Settings toggle: POST to server (/api/toggle) with state on/off; server prints “on” or “off”.
+Business rules from user:
+* Login page has fields: username, password, email, link + submit.
+    * On submit, print the payload in Flask console.
+    * Match against demo credentials (see code). If all match → go to main page. Else show error.
+* Main page header: left: Logout, center: Organization Name, right: Settings button (dropdown: “الجدولة”, and a toggle “تشغيل/إيقاف النظام”). Toggling prints “on/off” in Flask console.
+* Dashboard content:
+    * Title suitable to content (use “لوحة التحكم”).
+    * Group 1: Cards showing categories of domain (Organization / Lab / Request / Other) and total # of sent emails (server data).
+    * Group 2: Right: pie chart of the same domain distribution, Arabic title “توزيع فئات تصنيف الرسائل”. Left: bar chart for departments (D, F, E, MD) showing current employees count, Arabic title “عدد الموظفين الحاليين لكل قسم”.
+    * Group 3: Table “بيانات الموظفين”: columns (الاسم، البريد الإلكتروني، القسم، الإجمالي (الرسائل المرسلة)، المعالجة (الرسائل المعالجة)).
+        * Paginate 5 rows per page with Next/Back.
+        * Search by name or email.
+        * Filter by department (D/F/E/MD) or by day-group flags: suntue, wedthu, frisat where value is true.
+        * Search/filter actions must not hit the server (client-side only).
+* Page 3 (CRUD): Same “بيانات الموظفين” table but editable (Add / Edit / Delete inline).
+    * 
+
+
+from the flask app use the following list for group 3 and page 3 :
+EMPLOYEES = [
+    {
+        "id": 1, "name": "نواف العتيبي", "email": "nawaf@gmail.com",
+        "department": “d”, "suntue": True, "wedthu": True, "frisat": False,
+        "shift": "7am-3pm", "score": 90, "total": 120, "done": 110
+    },
+    {
+        "id": 2, "name": "نواف خالد", "email": "nawaf22@gmail.com",
+        "department": “e”, "suntue": True, "wedthu": False, "frisat": False,
+        "shift": "10am-6pm", "score": 75, "total": 64, "done": 50
+    },
+    {
+        "id": 3, "name": "سارة المطيري", "email": "sara.m@org.sa",
+        "department": “f”, "suntue": False, "wedthu": True, "frisat": False,
+        "shift": "7am-3pm", "score": 88, "total": 70, "done": 66
+    },
+    {
+        "id": 4, "name": "عبدالله الشهري", "email": "abdullah.sh@org.sa",
+        "department": “md”, "suntue": False, "wedthu": True, "frisat": True,
+        "shift": "10am-6pm", "score": 82, "total": 95, "done": 80
+    },
+    {
+        "id": 5, "name": "ريم الأحمد", "email": "reem.ah@org.sa",
+        "department": “d”, "suntue": True, "wedthu": False, "frisat": True,
+        "shift": "11am-2pm", "score": 92, "total": 40, "done": 36
+    },
+    {
+        "id": 6, "name": "ياسر الحربي", "email": "yasser@org.sa",
+        "department": “e”, "suntue": False, "wedthu": False, "frisat": True,
+        "shift": "10am-6pm", "score": 70, "total": 30, "done": 18
+    },
+    {
+        "id": 7, "name": "نورة الدوسري", "email": "nora@org.sa",
+        "department": “f”, "suntue": True, "wedthu": True, "frisat": False,
+        "shift": "7am-3pm", "score": 95, "total": 150, "done": 148
+    }
+]

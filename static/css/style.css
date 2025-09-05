@@ -1,0 +1,298 @@
+:root {
+    /* SFDA Authority Color Palette */
+    --primary-color: #1570EF;
+    --secondary-color: #17B26A;
+    --accent-color: #53B1FD;
+    --light-bg: #F5FAFF;
+    --card-bg: #FFFFFF;
+    --stats-card-bg: #F8FAFC;
+    --text-primary: #1F2A37;
+    --text-secondary: #6C737F;
+    --text-muted: #9DA4AE;
+    --border-color: #E5E7EB;
+    --border-light: #F3F4F6;
+    --background-light: #F9FAFB;
+    --white: #FFFFFF;
+    --error-color: #F04438;
+    --warning-color: #F79009;
+    --success-color: #17B26A;
+    --info-color: #53B1FD;
+}
+
+* {
+    font-family: 'Tajawal', system-ui, sans-serif;
+}
+
+body {
+    background-color: #F8FAFC;
+    color: var(--text-primary);
+    direction: rtl;
+    text-align: right;
+}
+
+/* Login Page Styling */
+.login-container {
+    min-height: 100vh;
+    background-color: var(--background-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-container .card {
+    border: none;
+    border-radius: 15px;
+    background: var(--white);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.login-container .card-body {
+    padding: 2rem;
+}
+
+/* Header Styling */
+.navbar-dark {
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* Navigation Tabs */
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: transparent;
+    border-bottom-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: transparent;
+    color: var(--primary-color);
+}
+
+/* Card Styling */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+}
+
+.card-header {
+    background-color: var(--white);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Statistics Cards */
+.stats-card {
+    background-color: var(--stats-card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+}
+
+.stats-card .card-body {
+    padding: 1.5rem;
+}
+
+/* Button Customization */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Table Styling */
+.table {
+    border: 1px solid var(--border-color);
+}
+
+.table-dark {
+    background-color: var(--secondary-color) !important;
+}
+
+.table thead th {
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 600;
+}
+
+.table tbody td {
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--border-light);
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(21, 112, 239, 0.25);
+}
+
+/* Alert Messages */
+.alert {
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.alert-danger {
+    background-color: #FEF3F2;
+    color: var(--error-color);
+    border-left: 4px solid var(--error-color);
+}
+
+.alert-success {
+    background-color: #ECFDF3;
+    color: var(--success-color);
+    border-left: 4px solid var(--success-color);
+}
+
+/* Pagination */
+.pagination .page-link {
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.pagination .page-link:hover {
+    color: var(--secondary-color);
+    background-color: var(--border-light);
+}
+
+/* Modal Customization */
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background-color: var(--border-light);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 15px 15px 0 0;
+    color: var(--text-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    :root {
+        --primary-color: #1B5E20;
+        --text-primary: #000000;
+        --border-color: #424242;
+    }
+}
+
+/* RTL Specific Adjustments */
+.dropdown-menu-end {
+    left: 0 !important;
+    right: auto !important;
+}
+
+.me-2 {
+    margin-left: 0.5rem !important;
+    margin-right: 0 !important;
+}
+
+/* Chart Container Responsiveness */
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+
+/* Custom styling for form switches */
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Badge styling */
+.badge {
+    font-weight: 500;
+}
+
+.badge.bg-success {
+    background-color: var(--success-color) !important;
+}
+
+.badge.bg-warning {
+    background-color: var(--warning-color) !important;
+    color: #FFFFFF !important;
+}
+
+.badge.bg-danger {
+    background-color: var(--error-color) !important;
+}
+
+.badge.bg-info {
+    background-color: var(--info-color) !important;
+}
+
+.badge.bg-secondary {
+    background-color: var(--text-secondary) !important;
+}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}تسجيل الدخول - نظام إدارة الموظفين{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
+                            <h2 class="card-title">تسجيل الدخول</h2>
+                            <p class="text-muted">الهيئة العامة للغذاء والدواء</p>
+                        </div>
+                        
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">اسم المستخدم</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">كلمة المرور</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">البريد الإلكتروني</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="link" class="form-label">الرابط</label>
+                                <input type="url" class="form-control" id="link" name="link" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-sign-in-alt me-2"></i>دخول
+                            </button>
+                        </form>
+                        
+                        <div class="mt-4 text-center">
+                            <small class="text-muted">
+                                للاختبار: admin / password123 / admin@org.sa / https://org.sa
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

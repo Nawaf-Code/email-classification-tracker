@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}بيانات الموظفين - نظام إدارة الموظفين{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>بيانات الموظفين</h1>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+            <i class="fas fa-plus me-2"></i>إضافة موظف
+        </button>
+    </div>
+    
+    <!-- Search and Filter Controls -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text" id="searchInput" class="form-control" 
+                   placeholder="البحث بالاسم أو البريد الإلكتروني">
+        </div>
+        <div class="col-md-2">
+            <select id="deptFilter" class="form-select">
+                <option value="">كل الأقسام</option>
+                <option value="d">D</option>
+                <option value="f">F</option>
+                <option value="e">E</option>
+                <option value="md">MD</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select id="dayFilter" class="form-select">
+                <option value="">كل الأيام</option>
+                <option value="suntue">الأحد-الثلاثاء</option>
+                <option value="wedthu">الأربعاء-الخميس</option>
+                <option value="frisat">الجمعة-السبت</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Employees Table -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="employeesTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>الاسم</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>القسم</th>
+                            <th>الإجمالي</th>
+                            <th>المعالجة</th>
+                            <th>النوبة</th>
+                            <th>النقاط</th>
+                            <th>الأيام</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeesTableBody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <nav>
+                <ul class="pagination justify-content-center" id="pagination">
+                    <!-- Will be populated by JavaScript -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">إضافة موظف جديد</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addEmployeeForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">الاسم</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">البريد الإلكتروني</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">القسم</label>
+                            <select name="department" class="form-select" required>
+                                <option value="">اختر القسم</option>
+                                <option value="d">D</option>
+                                <option value="f">F</option>
+                                <option value="e">E</option>
+                                <option value="md">MD</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">النوبة</label>
+                            <input type="text" name="shift" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">النقاط</label>
+                            <input type="number" name="score" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">الإجمالي</label>
+                            <input type="number" name="total" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">المعالجة</label>
+                            <input type="number" name="done" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">أيام العمل</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="suntue" id="suntue">
+                                    <label class="form-check-label" for="suntue">الأحد-الثلاثاء</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="wedthu" id="wedthu">
+                                    <label class="form-check-label" for="wedthu">الأربعاء-الخميس</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="frisat" id="frisat">
+                                    <label class="form-check-label" for="frisat">الجمعة-السبت</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="button" class="btn btn-primary" onclick="saveEmployee()">حفظ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Employee Modal -->
+<div class="modal fade" id="editEmployeeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تعديل بيانات الموظف</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editEmployeeForm">
+                    <input type="hidden" name="id">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">الاسم</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">البريد الإلكتروني</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">القسم</label>
+                            <select name="department" class="form-select" required>
+                                <option value="">اختر القسم</option>
+                                <option value="d">D</option>
+                                <option value="f">F</option>
+                                <option value="e">E</option>
+                                <option value="md">MD</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">النوبة</label>
+                            <input type="text" name="shift" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">النقاط</label>
+                            <input type="number" name="score" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">الإجمالي</label>
+                            <input type="number" name="total" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">المعالجة</label>
+                            <input type="number" name="done" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">أيام العمل</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="suntue" id="edit_suntue">
+                                    <label class="form-check-label" for="edit_suntue">الأحد-الثلاثاء</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="wedthu" id="edit_wedthu">
+                                    <label class="form-check-label" for="edit_wedthu">الأربعاء-الخميس</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="frisat" id="edit_frisat">
+                                    <label class="form-check-label" for="edit_frisat">الجمعة-السبت</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="button" class="btn btn-primary" onclick="updateEmployee()">حفظ التعديلات</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/employees.js') }}"></script>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Initialize with employee data
+    const initialEmployees = {{ employees | tojson }};
+    initializeEmployeesPage(initialEmployees);
+</script>
+{% endblock %}
