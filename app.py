@@ -1,12 +1,20 @@
 import os
 import logging
+from datetime import datetime, timedelta
+from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "default_secret_key_for_development")
+app.secret_key = os.environ.get("SESSION_SECRET", "your_very_secure_secret_key_change_this_in_production")
+
+# Session configuration for security
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)  # Session timeout
 
 # In-memory data storage
 EMPLOYEES = [
@@ -66,6 +74,24 @@ DEMO_CREDENTIALS = {
 # System status
 system_status = True
 
+# Authentication decorator
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in' not in session or not session.get('logged_in'):
+            return redirect(url_for('login'))
+        
+        # Check if session has expired
+        if 'login_time' in session:
+            login_time = datetime.fromisoformat(session['login_time'])
+            if datetime.now() - login_time > timedelta(hours=2):
+                session.clear()
+                flash('انتهت صلاحية الجلسة، يرجى تسجيل الدخول مرة أخرى', 'error')
+                return redirect(url_for('login'))
+        
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/')
 def index():
     if 'logged_in' in session:
@@ -74,6 +100,9 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Redirect if already logged in
+    if 'logged_in' in session and session.get('logged_in'):
+        return redirect(url_for('dashboard'))
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -94,7 +123,10 @@ def login():
             password == DEMO_CREDENTIALS['password'] and
             email == DEMO_CREDENTIALS['email'] and
             link == DEMO_CREDENTIALS['link']):
+            session.permanent = True
             session['logged_in'] = True
+            session['user'] = username
+            session['login_time'] = datetime.now().isoformat()
             return redirect(url_for('dashboard'))
         else:
             flash('بيانات الدخول غير صحيحة', 'error')
@@ -102,9 +134,8 @@ def login():
     return render_template('login.html')
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
-    if 'logged_in' not in session:
-        return redirect(url_for('login'))
     
     # Calculate department statistics
     dept_stats = {'D': 0, 'F': 0, 'E': 0, 'MD': 0}
@@ -118,34 +149,38 @@ def dashboard():
                          system_status=system_status)
 
 @app.route('/employees')
+@login_required
 def employees():
-    if 'logged_in' not in session:
-        return redirect(url_for('login'))
     
     return render_template('employees.html', employees=EMPLOYEES, system_status=system_status)
 
 @app.route('/logout')
 def logout():
-    session.pop('logged_in', None)
+    session.clear()
+    flash('تم تسجيل الخروج بنجاح', 'success')
     return redirect(url_for('login'))
 
 @app.route('/api/employees', methods=['GET'])
+@login_required
 def get_employees():
     return jsonify(EMPLOYEES)
 
 @app.route('/api/employees', methods=['POST'])
+@login_required
 def update_employees():
     global EMPLOYEES
     EMPLOYEES = request.json
     return jsonify({'status': 'success'})
 
 @app.route('/api/employees/<int:employee_id>', methods=['DELETE'])
+@login_required
 def delete_employee(employee_id):
     global EMPLOYEES
     EMPLOYEES = [emp for emp in EMPLOYEES if emp['id'] != employee_id]
     return jsonify({'status': 'success'})
 
 @app.route('/api/toggle', methods=['POST'])
+@login_required
 def toggle_setting():
     global system_status
     state = request.json.get('state', 'off')
@@ -154,4 +189,5 @@ def toggle_setting():
     return jsonify({'status': 'success', 'system_status': system_status})
 
 if __name__ == '__main__':
+    # For production, set debug=False
     app.run(host='0.0.0.0', port=5000, debug=True)
