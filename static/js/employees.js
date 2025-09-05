@@ -33,10 +33,7 @@ function renderEmployeesTable() {
             <td>${employee.name}</td>
             <td>${employee.email}</td>
             <td><span class="badge bg-secondary">${employee.department.toUpperCase()}</span></td>
-            <td><span class="badge bg-primary">${employee.total}</span></td>
-            <td><span class="badge bg-success">${employee.done}</span></td>
             <td>${employee.shift}</td>
-            <td><span class="badge bg-warning">${employee.score}</span></td>
             <td>
                 ${workingDays.map(day => `<span class="badge bg-info me-1">${day}</span>`).join('')}
             </td>
@@ -149,9 +146,9 @@ function saveEmployee() {
         email: formData.get('email'),
         department: formData.get('department'),
         shift: formData.get('shift'),
-        score: parseInt(formData.get('score')),
-        total: parseInt(formData.get('total')),
-        done: parseInt(formData.get('done')),
+        score: 0,
+        total: 0,
+        done: 0,
         suntue: formData.has('suntue'),
         wedthu: formData.has('wedthu'),
         frisat: formData.has('frisat')
@@ -182,9 +179,6 @@ function editEmployee(id) {
     form.elements['email'].value = employee.email;
     form.elements['department'].value = employee.department;
     form.elements['shift'].value = employee.shift;
-    form.elements['score'].value = employee.score;
-    form.elements['total'].value = employee.total;
-    form.elements['done'].value = employee.done;
     form.elements['suntue'].checked = employee.suntue;
     form.elements['wedthu'].checked = employee.wedthu;
     form.elements['frisat'].checked = employee.frisat;
@@ -207,9 +201,9 @@ function updateEmployee() {
         email: formData.get('email'),
         department: formData.get('department'),
         shift: formData.get('shift'),
-        score: parseInt(formData.get('score')),
-        total: parseInt(formData.get('total')),
-        done: parseInt(formData.get('done')),
+        score: employees[employeeIndex].score || 0,
+        total: employees[employeeIndex].total || 0,
+        done: employees[employeeIndex].done || 0,
         suntue: formData.has('suntue'),
         wedthu: formData.has('wedthu'),
         frisat: formData.has('frisat')
