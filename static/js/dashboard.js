@@ -27,8 +27,8 @@ function initializePieChart(emailCategories) {
         'Other': 'أخرى'
     };
     
-    const labels = Object.keys(emailCategories).map(key => arabicCategories[key] || key);
-    const data = Object.values(emailCategories);
+    const labels = emailCategories.map(item => arabicCategories[item.folder] || item.folder);
+    const data = emailCategories.map(item => item.score);
     
     new Chart(ctx, {
         type: 'pie',
